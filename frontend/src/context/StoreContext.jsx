@@ -4,7 +4,7 @@ import axios from "axios";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = ({ children }) => {
-  const url = "http://localhost:4000";
+  const url = "https://blogora-q83s.onrender.com";
   const [token, setToken] = useState("");
   const [user, setUser] = useState(null);
   const [blogData, setBlogData] = useState([]);
