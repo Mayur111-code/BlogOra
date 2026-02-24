@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 
 import { ToastContainer } from "react-toastify";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
 const App = () => {
   return (
     <div className="max-w-7xl mx-auto">
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/profile" element={<Profile/>}/>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />

@@ -1,11 +1,9 @@
-// components/shared/Container.jsx
 export const Container = ({ children }) => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     {children}
   </div>
 );
 
-// components/shared/SectionTitle.jsx
 export const SectionTitle = ({ children, subtitle }) => (
   <div className="mb-10 text-center sm:text-left">
     <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">

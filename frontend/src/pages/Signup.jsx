@@ -1,119 +1,9 @@
-// import { useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import axios from "axios";
-// import { toast } from "react-toastify";
-// const Signup = () => {
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     password: "",
-//     image: null,
-//   });
-//   const navigate = useNavigate();
-//   const [loading, setLoading] = useState(false);
-//   const onChangeHandler = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-//   const fileHandler = (e) => {
-//     setFormData({ ...formData, image: e.target.files[0] });
-//   };
-
-//   const submitHandler = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const data = new FormData();
-//       data.append("name", formData.name);
-//       data.append("email", formData.email);
-//       data.append("password", formData.password);
-//       data.append("image", formData.image);
-//       setLoading(true);
-//       const res = await axios.post(
-//         "http://localhost:4000/user/register",
-//         data,
-//         {
-//           headers: {
-//             "Content-Type": "multipart/formData",
-//           },
-//         }
-//       );
-//       if (res.data.success) {
-//         toast.success(res.data.message);
-//         navigate("/login");
-//       }
-//     } catch (error) {
-//       toast.error(error.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="w-full bg-pink-200 py-12 mx-auto flex items-center justify-center ">
-//       <div className="w-full bg-white max-w-md p-5 mx-auto py-6 border-1 border-gray-200 shadow-md">
-//         <h1 className="text-lg font-bold text-center text-gray-700">
-//           Create your account!
-//         </h1>
-//         <form
-//           onSubmit={submitHandler}
-//           className="flex flex-col gap-5 mt-5 w-full"
-//         >
-//           <input
-//             onChange={onChangeHandler}
-//             name="name"
-//             value={formData.name}
-//             type="text"
-//             placeholder="Your name"
-//             className="w-full p-2 border border-gray-300 rounded outline-none"
-//             required
-//           />
-//           <input
-//             onChange={onChangeHandler}
-//             name="email"
-//             value={formData.email}
-//             type="email"
-//             placeholder="Your email"
-//             className="w-full p-2 border border-gray-300 rounded outline-none"
-//             required
-//           />
-//           <input
-//             onChange={onChangeHandler}
-//             name="password"
-//             value={formData.password}
-//             type="password"
-//             placeholder="Your password"
-//             className="w-full p-2 border border-gray-300 rounded outline-none"
-//             required
-//           />
-//           <input
-//             onChange={fileHandler}
-//             accept="image/*"
-//             type="file"
-//             className="w-full p-2 border border-gray-300 rounded outline-none"
-//             required
-//           />
-//           <button className="bg-orange-600 text-white px-6 py-2 w-full cursor-pointer">
-//             Signup
-//           </button>
-//         </form>
-//         <p className="text-center mt-4">
-//           Already have an account?{" "}
-//           <Link to={"/login"} className="text-orange-600 cursor-pointer">
-//             Login Here
-//           </Link>{" "}
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
-// export default Signup;
-
-
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { HiUser, HiMail, HiLockClosed, HiCamera } from "react-icons/hi";
+import api from "../api/api";
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -123,7 +13,7 @@ const Signup = () => {
     image: null,
   });
   
-  const [preview, setPreview] = useState(null); // For image preview
+  const [preview, setPreview] = useState(null); 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -134,7 +24,7 @@ const Signup = () => {
   const fileHandler = (e) => {
     const file = e.target.files[0];
     setFormData({ ...formData, image: file });
-    setPreview(URL.createObjectURL(file)); // Create a local URL for the preview
+    setPreview(URL.createObjectURL(file)); 
   };
 
   const submitHandler = async (e) => {
@@ -149,8 +39,8 @@ const Signup = () => {
       data.append("password", formData.password);
       data.append("image", formData.image);
 
-      const res = await axios.post(
-        "http://localhost:4000/user/register",
+      const res = await api.post(
+        "/user/register",
         data,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -180,7 +70,7 @@ const Signup = () => {
           </div>
 
           <form onSubmit={submitHandler} className="space-y-5">
-            {/* Avatar Upload Section */}
+         
             <div className="flex flex-col items-center mb-6">
               <label htmlFor="avatar" className="relative cursor-pointer group">
                 <div className="w-24 h-24 rounded-full border-4 border-orange-50 overflow-hidden bg-gray-100 flex items-center justify-center transition-all group-hover:border-orange-200">

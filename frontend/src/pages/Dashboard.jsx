@@ -202,15 +202,12 @@
 
 
 
-
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { HiPlusCircle, HiViewList, HiTrash, HiCloudUpload } from "react-icons/hi";
-
+import api, { BASE_URL } from "../api/api"; 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("list");
-  const token = localStorage.getItem("token");
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -218,9 +215,6 @@ const Dashboard = () => {
     image: null,
   });
   const [blogs, setBlogs] = useState([]);
-
-  // Base URL for API
-  const url = "http://localhost:4000";
 
   const onChangeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -239,15 +233,14 @@ const Dashboard = () => {
     data.append("image", formData.image);
 
     try {
-      const res = await axios.post(`${url}/blog/create`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      toast.success(res.data.message);
-      setFormData({ title: "", category: "", description: "", image: null });
-      setActiveTab("list"); // Redirect to list after posting
+     
+      const res = await api.post("/blog/create", data);
+      
+      if (res.data.success) {
+        toast.success(res.data.message);
+        setFormData({ title: "", category: "", description: "", image: null });
+        setActiveTab("list");
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || "Upload failed");
     }
@@ -256,12 +249,13 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get(`${url}/blog/all`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setBlogs(res.data.blogs);
+       
+        const res = await api.get("/blog/all");
+        if (res.data.success) {
+          setBlogs(res.data.blogs);
+        }
       } catch (error) {
-        console.error("error", error);
+        console.error("Fetch Error:", error);
       }
     };
     fetchBlogs();
@@ -270,11 +264,11 @@ const Dashboard = () => {
   const removeBlog = async (blogId) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
     try {
-      const res = await axios.delete(`${url}/blog/delete/${blogId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      toast.success(res.data.message);
-      setBlogs(blogs.filter((blog) => blog._id !== blogId));
+      const res = await api.delete(`/blog/delete/${blogId}`);
+      if (res.data.success) {
+        toast.success(res.data.message);
+        setBlogs(blogs.filter((blog) => blog._id !== blogId));
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || "Delete failed");
     }
@@ -282,7 +276,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
-      {/* Sidebar */}
+    
       <aside className="w-full md:w-72 bg-white border-r border-gray-200 p-6">
         <div className="mb-10 px-2">
           <h2 className="text-2xl font-black text-gray-800 tracking-tight">
@@ -311,7 +305,7 @@ const Dashboard = () => {
         </nav>
       </aside>
 
-      {/* Main Content Area */}
+      
       <main className="flex-1 p-6 md:p-12 overflow-y-auto">
         <div className="max-w-5xl mx-auto">
           {activeTab === "post" ? (
@@ -336,6 +330,7 @@ const Dashboard = () => {
                     <select 
                       name="category" value={formData.category} onChange={onChangeHandler}
                       className="w-full border border-gray-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-500 outline-none bg-white"
+                      required
                     >
                       <option value="">Select Category</option>
                       <option value="Technology">Technology</option>
@@ -362,7 +357,7 @@ const Dashboard = () => {
                       <HiCloudUpload size={40} className="text-gray-400 group-hover:text-orange-500 mb-2" />
                       <p className="text-sm text-gray-500">{formData.image ? formData.image.name : "Click to upload image"}</p>
                     </div>
-                    <input onChange={fileHandler} type="file" accept="image/*" className="hidden" />
+                    <input onChange={fileHandler} type="file" accept="image/*" className="hidden" required />
                   </label>
                 </div>
 
@@ -392,9 +387,10 @@ const Dashboard = () => {
                       <tr key={blog._id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4">
                           <img
-                            src={`${url}/images/${blog.image}`}
+                            src={`${BASE_URL}/images/${blog.image}`}
                             alt=""
                             className="w-20 h-14 object-cover rounded-lg shadow-sm"
+                            onError={(e) => { e.target.src = "https://via.placeholder.com/150"; }}
                           />
                         </td>
                         <td className="px-6 py-4">

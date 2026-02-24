@@ -1,92 +1,3 @@
-// import { Link } from "react-router-dom";
-// import { assets } from "../assets/assets";
-// const Footer = () => {
-//   return (
-//     <>
-//       <div className="flex flex-col py-12 md:flex-row items-center justify-between">
-//         {/* first div */}
-//         <div className="w-full items-center flex flex-col justify-center px-2 sm:w-1/3 gap-2">
-//           <h1 className="text-xl font-bold text-gray-700">About</h1>
-//           <p className="text-base px-3 sm:text-lg leading-6 max-w-2xl mx-auto">
-//   At Blogora, we believe knowledge should have no boundaries. Whether you're 
-//   passionate about technology, curious about education, exploring travel 
-//   destinations, following sports, or improving your health — you'll find 
-//   meaningful content crafted to inform, inspire, and empower you every day.
-// </p>
-//           <h4 className="text-lg font-normal">Email: blogora@gmail.com</h4>
-//           <h4 className="text-lg font-normal">Phone: 1234567890</h4>
-//         </div>
-//         {/* second div */}
-//         <div>
-//           <h1 className="text-xl font-bold text-gray-700 mb-5">Quick Links</h1>
-//           <ul className="flex flex-col gap-2">
-//             <Link
-//               className="cursor-pointer hover:text-black text-gray-700"
-//               to="/"
-//             >
-//               Home
-//             </Link>
-//             <Link
-//               className="cursor-pointer hover:text-black text-gray-700"
-//               to="/blogs"
-//             >
-//               Blogs
-//             </Link>
-//             <Link
-//               className="cursor-pointer hover:text-black text-gray-700"
-//               to="/about"
-//             >
-//               About
-//             </Link>
-//             <Link
-//               className="cursor-pointer hover:text-black text-gray-700"
-//               to="/contact"
-//             >
-//               Contact
-//             </Link>
-//           </ul>
-//         </div>
-//         {/* third div */}
-//         <div>
-//           <h1 className="text-xl font-bold text-gray-700 mb-5">Categories</h1>
-//           <ul className="flex flex-col gap-2">
-//             <Link className="cursor-pointer hover:text-black text-gray-700">
-//               Weather
-//             </Link>
-//             <Link className="cursor-pointer hover:text-black text-gray-700">
-//               Lifestyle
-//             </Link>
-//             <Link className="cursor-pointer hover:text-black text-gray-700">
-//               Technology
-//             </Link>
-//             <Link className="cursor-pointer hover:text-black text-gray-700">
-//               News
-//             </Link>
-//           </ul>
-//         </div>
-//       </div>
-//       <hr className="h-0.5 text-gray-600 bg-gray-700 w-full" />
-//       <div className="flex flex-col sm:flex-row justify-between items-center my-6">
-//         <div className="flex  gap-2 items-center justify-center">
-//           <img src={assets.logo} alt="" />
-//           <p>
-//             Blog <span className="font-bold text-xl">Ora</span>{" "}
-//           </p>
-//         </div>
-//         <ul className="flex flex-col sm:flex-row items-center  gap-3">
-//           <li>Privacy Policy</li>
-//           <li>Terms and conditions</li>
-//           <li> copyright @Blogora The Blog App </li>
-//         </ul>
-//       </div>
-//     </>
-//   );
-// };
-// export default Footer;
-
-
-
-
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { Container } from "../components/shared/Container";
@@ -100,7 +11,7 @@ const Footer = () => {
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
-          {/* Brand & About */}
+       
           <div className="space-y-6">
             <div className="flex items-center gap-2">
               <img src={assets.logo} alt="Logo" className="w-8 brightness-0 invert" />
@@ -120,7 +31,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h3 className="text-white font-bold text-lg mb-6 uppercase tracking-wider">Quick Links</h3>
             <ul className="flex flex-col gap-4">
@@ -137,7 +47,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Categories */}
           <div>
             <h3 className="text-white font-bold text-lg mb-6 uppercase tracking-wider">Categories</h3>
             <ul className="flex flex-col gap-4">
@@ -151,7 +60,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div>
             <h3 className="text-white font-bold text-lg mb-6 uppercase tracking-wider">Contact</h3>
             <ul className="space-y-4 text-sm">
@@ -176,7 +84,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+ 
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-500">
           <p>© {currentYear} Blogora The Blog App. All rights reserved.</p>
           <ul className="flex gap-6">

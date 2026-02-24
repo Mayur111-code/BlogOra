@@ -1,29 +1,3 @@
-// import { assets } from "../assets/assets";
-// const About = () => {
-//   return (
-//     <div>
-//       <h1 className="text-center text-3xl uppercase font-bold my-8">
-//         About us
-//       </h1>
-//       <p className="text-gray-700 text-lg leading-relaxed max-w-2xl mx-auto my-6">
-//         {" "}
-//         Welcome to <span className="text-blue-600 font-semibold ">MyBlog</span>,
-//         your go-to platform for insightful articles on technology, lifestyle,
-//         and beyond. Our mission is to share knowledge and inspire creativity
-//         through engaging and well-researched content. Whether you're a tech
-//         enthusiast, a passionate writer, or someone looking for inspiration,
-//         we've got something for you!
-//       </p>
-//       <div>
-//         <img src={assets.about} alt="" />
-//       </div>
-//     </div>
-//   );
-// };
-// export default About;
-
-
-
 import { assets } from "../assets/assets";
 import { Container, SectionTitle } from "../components/shared/Container";
 
@@ -31,7 +5,7 @@ const About = () => {
   return (
     <main className="py-16 bg-white">
       <Container>
-        {/* Header Section */}
+      
         <div className="text-center max-w-3xl mx-auto mb-16">
           <SectionTitle subtitle="Our Journey & Vision">About Blog Ora</SectionTitle>
           <p className="text-gray-600 text-lg leading-relaxed mt-6">
@@ -42,10 +16,10 @@ const About = () => {
           </p>
         </div>
 
-        {/* Content Section: Split Image & Text */}
+       
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <div className="flex-1 relative">
-            {/* Decorative element */}
+         
             <div className="absolute -top-4 -left-4 w-24 h-24 bg-orange-100 rounded-full -z-10 animate-pulse"></div>
             <img 
               src={assets.about} 
@@ -83,7 +57,6 @@ const About = () => {
           </div>
         </div>
 
-        {/* Brand Stats Section */}
         <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 p-10 bg-gray-50 rounded-3xl">
           {[
             { label: "Articles", value: "500+" },

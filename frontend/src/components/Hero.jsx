@@ -1,15 +1,3 @@
-// import { assets } from "../assets/assets";
-
-// const Hero = () => {
-//   return (
-//     <div className="my-6 flex justify-center items-center">
-//       <img src={assets.hero} alt="" className="w-[80%]" />
-//     </div>
-//   );
-// };
-// export default Hero;
-
-
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
 
@@ -18,7 +6,7 @@ const Hero = () => {
     <div className="relative bg-gradient-to-br from-orange-50 to-white overflow-hidden rounded-3xl my-6 mx-4 sm:mx-8 lg:mx-auto max-w-7xl">
       <div className="flex flex-col md:flex-row items-center justify-between px-8 py-12 md:py-20 gap-10">
         
-        {/* Text Content */}
+       
         <div className="flex-1 space-y-6 text-center md:text-left">
           <span className="bg-orange-100 text-orange-600 px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide uppercase">
             New Perspectives
@@ -39,7 +27,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Hero Image with Floating Effect */}
+      
         <div className="flex-1 relative group">
           <div className="absolute -inset-4 bg-orange-200/50 rounded-full blur-3xl group-hover:bg-orange-300/50 transition-colors"></div>
           <img 

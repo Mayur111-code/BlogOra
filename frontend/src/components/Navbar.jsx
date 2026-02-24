@@ -1,89 +1,11 @@
-// import { Link } from "react-router-dom";
-// import { assets } from "../assets/assets";
-// import { useContext } from "react";
-// import { StoreContext } from "../context/StoreContext";
-// const Navbar = () => {
-//   const { user, logoutUser } = useContext(StoreContext);
-//   return (
-//     <nav className="bg-white p-4 stciky top-0">
-//       <div className="flex container mx-auto justify-between items-center">
-//         {/* logo */}
-//         <div className="flex gap-2 items-center">
-//           <Link to={"/"}>
-//             <img src={assets.logo} alt="" />
-//           </Link>
-//           <p className="hidden sm:block text-2xl">
-//             Blog <span className="font-bold text-2xl">Ora</span>
-//           </p>
-//         </div>
-
-//         {/* center content */}
-//         <ul className="hidden sm:flex gap-5 text-xl font-normal justify-center items-center text-gray-700">
-//           <Link
-//             to="/"
-//             className="cursor-pointer hover:text-orange-500 duration-300"
-//           >
-//             Home
-//           </Link>
-//           <Link
-//             to="/blogs"
-//             className="cursor-pointer hover:text-orange-500 duration-300"
-//           >
-//             Blogs
-//           </Link>
-//           <Link
-//             to="/about"
-//             className="cursor-pointer hover:text-orange-500 duration-300"
-//           >
-//             About
-//           </Link>
-//           <Link
-//             to="/contact"
-//             className="cursor-pointer hover:text-orange-500 duration-300"
-//           >
-//             Contact
-//           </Link>
-//         </ul>
-
-//         {user ? (
-//           <div className="flex gap-2">
-//             <Link
-//               to={"/dashboard"}
-//               className="bg-black px-6 py-2 rounded-full text-white"
-//             >
-//               Dashboard
-//             </Link>
-//             <button
-//               onClick={logoutUser}
-//               className="bg-orange-500 text-white px-6 py-2 rounded-full cursor-pointer hover:bg-orange-600 duration-300"
-//             >
-//               Logout
-//             </button>
-//           </div>
-//         ) : (
-//           <Link
-//             to={"/login"}
-//             className="bg-orange-500 text-white px-8 py-2 rounded-full cursor-pointer hover:bg-orange-600 duration-300"
-//           >
-//             Signin
-//           </Link>
-//         )}
-//       </div>
-//     </nav>
-//   );
-// };
-// export default Navbar;
-
-
-
 import { useState, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { StoreContext } from "../context/StoreContext";
-import { HiMenuAlt3, HiX } from "react-icons/hi"; // Install react-icons if you haven't!
+import { HiMenuAlt3, HiX, HiUserCircle } from "react-icons/hi"; // Naya icon add kiya
 
 const Navbar = () => {
-  const { user, logoutUser } = useContext(StoreContext);
+  const { user, logoutUser, url } = useContext(StoreContext); // url context se liya
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
@@ -101,7 +23,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {/* Logo Section */}
+
           <Link to="/" className="flex items-center gap-2 group">
             <img src={assets.logo} alt="Logo" className="w-10 group-hover:rotate-12 transition-transform duration-300" />
             <p className="text-2xl tracking-tight text-gray-800">
@@ -109,7 +31,6 @@ const Navbar = () => {
             </p>
           </Link>
 
-          {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <NavLink 
@@ -122,16 +43,30 @@ const Navbar = () => {
             ))}
           </ul>
 
-          {/* Action Buttons */}
+
           <div className="hidden md:flex items-center gap-4">
             {user ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
+       
+                <Link to="/profile" className="flex items-center gap-2 group">
+                  {user.image ? (
+                    <img 
+                      src={`${url}/images/${user.image}`} 
+                      alt="Profile" 
+                      className="w-10 h-10 rounded-full object-cover border-2 border-transparent group-hover:border-orange-500 transition-all"
+                    />
+                  ) : (
+                    <HiUserCircle size={35} className="text-gray-400 group-hover:text-orange-500 transition-all" />
+                  )}
+                </Link>
+
                 <Link
                   to="/dashboard"
                   className="bg-gray-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 transition-all active:scale-95"
                 >
                   Dashboard
                 </Link>
+                
                 <button
                   onClick={logoutUser}
                   className="border border-orange-500 text-orange-600 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-orange-50 transition-all active:scale-95"
@@ -149,7 +84,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+
           <div className="md:hidden flex items-center">
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -161,10 +96,29 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+
       {isMenuOpen && (
         <div className="md:hidden bg-white border-b border-gray-100 animate-fadeIn">
           <div className="px-4 pt-2 pb-6 space-y-2">
+           
+            {user && (
+              <Link 
+                to="/profile" 
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl mb-4"
+              >
+                <img 
+                  src={user.image ? `${url}/images/${user.image}` : assets.profile_icon} 
+                  className="w-10 h-10 rounded-full object-cover" 
+                  alt=""
+                />
+                <div>
+                  <p className="font-bold text-gray-800">{user.name}</p>
+                  <p className="text-xs text-gray-500">View Profile</p>
+                </div>
+              </Link>
+            )}
+
             {navLinks.map((link) => (
               <Link
                 key={link.name}
