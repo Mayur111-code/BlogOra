@@ -10,7 +10,7 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) {
-      // Backend ke 'isAuthenticated' middleware ke hisaab se format set kiya:
+      
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
