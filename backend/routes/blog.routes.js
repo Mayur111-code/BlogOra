@@ -10,6 +10,7 @@ import {
 const router = express.Router();
 router.post("/create", isAuthenticated, upload.single("image"), createBlog);
 router.get("/all", allBlogs);
+router.get("/my-blogs", isAuthenticated, userBlogs);
 router.delete("/delete/:id", isAuthenticated, deleteBlog);
 router.get("/user/blogs", isAuthenticated, userBlogs);
 export default router;

@@ -202,10 +202,11 @@
 
 
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { HiPlusCircle, HiViewList, HiTrash, HiCloudUpload } from "react-icons/hi";
 import api, { BASE_URL } from "../api/api"; 
+import { StoreContext } from "../context/StoreContext";
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("list");
   const [formData, setFormData] = useState({
@@ -215,6 +216,7 @@ const Dashboard = () => {
     image: null,
   });
   const [blogs, setBlogs] = useState([]);
+  const { user } = useContext(StoreContext);
 
   const onChangeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -249,9 +251,14 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-       
-        const res = await api.get("/blog/all");
-        if (res.data.success) {
+        // fetch only blogs for authenticated user (use existing deployed route)
+        const res = await api.get("/blog/user/blogs");
+        // userBlogs returns an array (status 200) or wraps in data; handle both
+        if (res.data?.success) {
+          setBlogs(res.data.blogs || []);
+        } else if (Array.isArray(res.data)) {
+          setBlogs(res.data);
+        } else if (res.data.blogs) {
           setBlogs(res.data.blogs);
         }
       } catch (error) {
@@ -261,8 +268,13 @@ const Dashboard = () => {
     fetchBlogs();
   }, [activeTab]);
 
-  const removeBlog = async (blogId) => {
+  const removeBlog = async (blogId, ownerId) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
+    // client-side guard: only owner can trigger delete
+    if (String(ownerId) !== String(user?._id)) {
+      toast.error("Not authorized to delete this blog");
+      return;
+    }
     try {
       const res = await api.delete(`/blog/delete/${blogId}`);
       if (res.data.success) {
@@ -400,12 +412,16 @@ const Dashboard = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <button
-                            onClick={() => removeBlog(blog._id)}
-                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                          >
-                            <HiTrash size={20} />
-                          </button>
+                          {String(blog.author?.id) === String(user?._id) ? (
+                            <button
+                              onClick={() => removeBlog(blog._id, blog.author?.id)}
+                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                            >
+                              <HiTrash size={20} />
+                            </button>
+                          ) : (
+                            <span className="text-xs text-gray-400">—</span>
+                          )}
                         </td>
                       </tr>
                     ))}

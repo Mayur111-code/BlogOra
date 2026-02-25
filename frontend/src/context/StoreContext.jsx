@@ -12,7 +12,7 @@ const StoreContextProvider = ({ children }) => {
   const fetchUserProfile = async (storedToken) => {
     try {
       const res = await axios.get(`${url}/user/profile`, {
-        headers: { token: storedToken },
+        headers: { Authorization: `Bearer ${storedToken}` },
       });
       if (res.data.success) {
         setUser(res.data.user);
@@ -20,8 +20,8 @@ const StoreContextProvider = ({ children }) => {
       }
     } catch (error) {
       console.log("Sync Error:", error.response?.data?.message || error.message);
-      
-      if (error.response && error.response.status === 401) {
+
+      if (error.response && (error.response.status === 401 || error.response.status === 402)) {
         logoutUser();
       }
     }
