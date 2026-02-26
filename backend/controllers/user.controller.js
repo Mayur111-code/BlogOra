@@ -43,7 +43,7 @@ export const login = async (req, res) => {
         .json({ message: "Invalid password", success: false });
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SCERECT, {
-      expiresIn: "1d",
+      expiresIn: "7d",
     });
     res
       .status(200)
@@ -54,10 +54,10 @@ export const login = async (req, res) => {
 };
 
 
-// Get User Profile
+
 export const getUserProfile = async (req, res) => {
     try {
-        // req.user.id hume auth middleware se milegi
+    
         const user = await User.findById(req.user.id).select("-password");
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
@@ -68,7 +68,7 @@ export const getUserProfile = async (req, res) => {
     }
 };
 
-// Update User Profile
+
 export const updateUserProfile = async (req, res) => {
     try {
         const { name, email } = req.body;
@@ -79,9 +79,9 @@ export const updateUserProfile = async (req, res) => {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        // Agar nai image upload ki hai
+       
         if (req.file) {
-            // Purani image delete karo agar exist karti hai
+          
             if (user.image) {
                 fs.unlink(`uploads/${user.image}`, (err) => {
                     if (err) console.log("Old image delete error:", err);
