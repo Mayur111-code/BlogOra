@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+// using sonner instead of react-toastify
+import { toast } from "sonner";
 import { StoreContext } from "../context/StoreContext";
 import { HiMail, HiLockClosed } from "react-icons/hi"; 
 import api from "../api/api";

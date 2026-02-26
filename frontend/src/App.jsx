@@ -9,7 +9,8 @@ import SingleBlog from "./pages/SingleBlog";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-import { ToastContainer } from "react-toastify";
+// switched from react-toastify to sonner for lightweight toasts
+import { Toaster } from "sonner";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 const App = () => {
@@ -28,7 +29,8 @@ const App = () => {
         <Route path="/blog/:id" element={<SingleBlog />} />
       </Routes>
       <Footer />
-      <ToastContainer />
+      {/* Sonner toaster is mounted once at root for global notifications */}
+      <Toaster position="top-right" />
     </div>
   );
 };

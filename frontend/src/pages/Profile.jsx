@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+// switched to sonner notifications
+import { toast } from "sonner";
 import { StoreContext } from "../context/StoreContext";
 import { HiCamera, HiUser, HiMail, HiSave } from "react-icons/hi";
 

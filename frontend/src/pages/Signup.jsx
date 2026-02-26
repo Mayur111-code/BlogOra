@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+// replaced react-toastify with sonner
+import { toast } from "sonner";
 import { HiUser, HiMail, HiLockClosed, HiCamera } from "react-icons/hi";
 import api from "../api/api";
 

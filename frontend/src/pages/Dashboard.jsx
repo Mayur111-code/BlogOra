@@ -1,43 +1,3 @@
-// import axios from "axios";
-// import { useContext, useEffect, useState } from "react";
-// import { toast } from "react-toastify";
-
-// const Dashboard = () => {
-//   const [activeTab, setActiveTab] = useState("list");
-//   const token = localStorage.getItem("token");
-//   const [formData, setFormData] = useState({
-//     title: "",
-//     category: "",
-//     description: "",
-//     image: null,
-//   });
-//   const [blogs, setBlogs] = useState([]);
-//   const onChangeHandler = (e) => {
-//     console.log(e.target.value);
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-//   const fileHandler = (e) => {
-//     setFormData({ ...formData, image: e.target.files[0] });
-//   };
-
-//   const submitHandler = async (e) => {
-//     e.preventDefault();
-
-//     const data = new FormData();
-//     data.append("title", formData.title);
-//     data.append("category", formData.category);
-//     data.append("description", formData.description);
-//     data.append("image", formData.image);
-//     try {
-//       const res = await axios.post(
-//         "http://localhost:4000/blog/create",
-//         formData,
-//         {
-//           headers: {
-//             "Content-Type": "multipart/form-data",
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
 //       );
 //       console.log("res", res);
 //       toast.success(res.data.message);
@@ -203,7 +163,8 @@
 
 
 import { useEffect, useState, useContext } from "react";
-import { toast } from "react-toastify";
+// using sonner instead of react-toastify
+import { toast } from "sonner";
 import { HiPlusCircle, HiViewList, HiTrash, HiCloudUpload } from "react-icons/hi";
 import api, { BASE_URL } from "../api/api"; 
 import { StoreContext } from "../context/StoreContext";
