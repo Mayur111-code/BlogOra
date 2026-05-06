@@ -86,12 +86,30 @@ const Footer = () => {
 
  
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-500">
-          <p>© {currentYear} Blogora The Blog App. All rights reserved.</p>
-          <ul className="flex gap-6">
-            <li className="hover:text-white cursor-pointer transition-colors underline-offset-4 hover:underline">Privacy Policy</li>
-            <li className="hover:text-white cursor-pointer transition-colors underline-offset-4 hover:underline">Terms & Conditions</li>
-          </ul>
-        </div>
+  <p className="text-center md:text-left">
+    © {currentYear} Blogora The Blog App. All rights reserved.{" "}
+    <span className="mx-1">|</span>
+    Powered by{" "}
+    <a
+      href="https://web-craft-services.vercel.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-white hover:underline underline-offset-4 transition-colors"
+    >
+      WebCraft
+    </a>
+  </p>
+
+  <ul className="flex gap-6">
+    <li className="hover:text-white cursor-pointer transition-colors underline-offset-4 hover:underline">
+      Privacy Policy
+    </li>
+
+    <li className="hover:text-white cursor-pointer transition-colors underline-offset-4 hover:underline">
+      Terms & Conditions
+    </li>
+  </ul>
+</div>
       </Container>
     </footer>
   );
