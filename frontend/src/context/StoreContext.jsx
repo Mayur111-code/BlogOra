@@ -1,84 +1,106 @@
-import { createContext, useEffect, useState } from "react";
-import axios from "axios";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import api, { BASE_URL, setUnauthorizedHandler } from "../api/api";
+import { queryKeys } from "../lib/queryClient";
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = ({ children }) => {
-  const url = "https://blogora-q83s.onrender.com";
-  const [token, setToken] = useState("");
-  const [user, setUser] = useState(null);
-  const [blogData, setBlogData] = useState([]);
+  const url = BASE_URL;
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const fetchUserProfile = async (storedToken) => {
+  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+  const [user, setUser] = useState(() => {
     try {
-      const res = await axios.get(`${url}/user/profile`, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      });
-      if (res.data.success) {
-        setUser(res.data.user);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-      }
-    } catch (error) {
-      console.log("Sync Error:", error.response?.data?.message || error.message);
-
-      if (error.response && (error.response.status === 401 || error.response.status === 402)) {
-        logoutUser();
-      }
+      const stored = localStorage.getItem("user");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
     }
-  };
+  });
 
-  useEffect(() => {
-    async function loadData() {
-      
-      try {
-        const res = await axios.get(`${url}/blog/all`);
-        setBlogData(res.data.blogs);
-      } catch (error) {
-        console.log("Blog fetch error:", error);
+  const blogsQuery = useQuery({
+    queryKey: queryKeys.blogs(),
+    queryFn: async () => {
+      const { data } = await api.get("/blog/all");
+      return data?.blogs || [];
+    },
+  });
+
+  useQuery({
+    queryKey: queryKeys.profile(),
+    enabled: Boolean(token),
+    queryFn: async () => {
+      const { data } = await api.get("/user/profile");
+      if (data?.success && data?.user) {
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        return data.user;
       }
+      return null;
+    },
+  });
 
-      const storedToken = localStorage.getItem("token");
-      const storedUser = localStorage.getItem("user");
-
-      if (storedToken) {
-        setToken(storedToken);
-        if (storedUser) {
-          try {
-            setUser(JSON.parse(storedUser)); 
-          } catch (e) {
-            console.error("User parse error");
-          }
-        }
-       
-        await fetchUserProfile(storedToken);
-      }
-    }
-    loadData();
-  }, []);
-
-  const loginUser = (userData, userToken) => {
+  const loginUser = useCallback((userData, userToken) => {
     setToken(userToken);
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", userToken);
-  };
+  }, []);
 
-  const logoutUser = () => {
+  const logoutUser = useCallback(() => {
     setToken("");
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-  };
+    queryClient.removeQueries({ queryKey: queryKeys.profile() });
+  }, [queryClient]);
 
-  const contextValue = { 
-    url, 
-    token, 
-    blogData, 
-    user, 
-    setUser, 
-    loginUser, 
-    logoutUser 
-  };
+  useEffect(() => {
+    setUnauthorizedHandler((status) => {
+      if (!token) return;
+      logoutUser();
+      if (status === 401 || status === 402) {
+        toast.error("Session expired, please login again");
+        navigate("/login", { replace: true });
+      }
+    });
+    return () => setUnauthorizedHandler(null);
+  }, [token, logoutUser, navigate]);
+
+  const blogData = useMemo(
+    () => (Array.isArray(blogsQuery.data) ? blogsQuery.data : []),
+    [blogsQuery.data]
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      url,
+      token,
+      user,
+      setUser,
+      loginUser,
+      logoutUser,
+      blogData,
+      blogsLoading: blogsQuery.isLoading,
+      blogsError: blogsQuery.error,
+      refetchBlogs: blogsQuery.refetch,
+    }),
+    [
+      url,
+      token,
+      user,
+      loginUser,
+      logoutUser,
+      blogData,
+      blogsQuery.isLoading,
+      blogsQuery.error,
+      blogsQuery.refetch,
+    ]
+  );
 
   return (
     <StoreContext.Provider value={contextValue}>

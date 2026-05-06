@@ -1,5 +1,9 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+
+const getJwtSecret = () =>
+  process.env.JWT_SCERECT || process.env.JWT_SECRET || "";
+
 export const isAuthenticated = async (req, res, next) => {
   let token;
   if (
@@ -8,17 +12,26 @@ export const isAuthenticated = async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(" ")[1];
   }
+
   if (!token) {
-    return res.status(402).json({ message: "unauthorized" });
+    return res
+      .status(401)
+      .json({ success: false, message: "Unauthorized: token missing" });
   }
+
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SCERECT);
-    req.user = await User.findById(decoded.id).select("-password");
-    if (!req.user) {
-      return res.status(401).json({ message: "user not found" });
+    const decoded = jwt.verify(token, getJwtSecret());
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "User not found" });
     }
-    next();
+    req.user = user;
+    return next();
   } catch (error) {
-    console.log("error in authentication", error);
+    return res
+      .status(401)
+      .json({ success: false, message: "Unauthorized: invalid or expired token" });
   }
 };
