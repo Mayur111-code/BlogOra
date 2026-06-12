@@ -92,7 +92,7 @@ const Contact = () => {
                     Email Address
                   </p>
                   <p className="text-lg font-bold text-gray-900 tracking-tight">
-                    mayurborse7440@gmail.com
+                    mayurborse7440@gmail.com / itserviceswebcraft@gmail.com
                   </p>
                 </div>
               </div>
